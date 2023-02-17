@@ -1,0 +1,11 @@
+{
+  "include": ["src/**/*", "node_modules/@types/**/*", "index.js"],
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "target": "ES6"
+  }
+}
