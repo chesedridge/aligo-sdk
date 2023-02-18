@@ -3,8 +3,14 @@
 import AligoKakaoSDK from "./index.js"
 
 const aligoKakaoSDK = new AligoKakaoSDK({
-  key: "key",
-  userId: "userId",
-  sender: "sender",
-  senderKey: "senderKey"
+  key: process.env.key,
+  userId: process.env.userId,
+  sender: process.env.sender,
+  senderKey: process.env.senderKey
 })
+
+try {
+  await aligoKakaoSDK._getToken()
+} catch (err) {
+  console.error(err)
+}
