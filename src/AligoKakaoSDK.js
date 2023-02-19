@@ -48,6 +48,47 @@ import Utils from "./utils.js"
  * scnt: number,
  * fcnt: number,
  * }} SentMessageInfo
+ *
+ * @typedef {{
+ * mid: number,
+ * type: string,
+ * sender: string,
+ * msg_count: number,
+ * mbody: string,
+ * reserve_date: string,
+ * reserve_state: string,
+ * regdate: string,
+ * }} MessageHistory
+ *
+ * @typedef {{
+ * msgid: string,
+ * type: string,
+ * sender: string,
+ * phone: string,
+ * status: number,
+ * reqdate: string,
+ * sentdate: string,
+ * rsltdate: string,
+ * reportdate: string,
+ * rslt: string,
+ * message: string,
+ * button_json: string,
+ * tpl_code: string,
+ * senderKey: string,
+ * smid: string,
+ * }} MessageHistoryDetail
+ *
+ * @typedef {{
+ * mid: number,
+ * type: string,
+ * sender: string,
+ * msg_count: number,
+ * mbody: string,
+ * reserve_date: string,
+ * reserve_state: string,
+ * regdate: string,
+ * list: MessageHistoryDetail[]
+ * }} MessageHistoryDetailList
  */
 
 class AligoKakaoSDK {
@@ -91,10 +132,6 @@ class AligoKakaoSDK {
     }
   }
 
-  async _getMessageHistoryPage() {}
-
-  async _getMessageDetail(mid) {}
-
   /**
    *
    * @returns {Promise<Template[]>}
@@ -123,7 +160,130 @@ class AligoKakaoSDK {
     }
   }
 
-  async getMessageHistory() {}
+  /**
+   *
+   * @param {Date} startDate
+   * @param {Date} endDate
+   * @param {number} page
+   * @param {number} limit
+   * @returns {Promise<{page:{current:number,total:number},list:MessageHistory[]}>}
+   */
+
+  async getMessageHistoryPage(startDate, endDate, page = 1, limit = 500) {
+    await this._tokenCheck()
+
+    const body = {
+      token: this.#token.content,
+      apikey: this.#config.key,
+      userid: this.#config.userId,
+      page,
+      limit,
+      startdate: Utils.formatDate(startDate, "YYYYMMDD"),
+      enddate: Utils.formatDate(endDate, "YYYYMMDD")
+    }
+
+    const res = await Utils.sendFormPost(
+      "https://kakaoapi.aligo.in/akv10/history/list",
+      body
+    )
+
+    if (res.code === 0) {
+      return {
+        list: res.list,
+        page: {
+          current: Number(res.currentPage),
+          total: Number(res.totalPage)
+        }
+      }
+    } else {
+      throw new Error(res.message)
+    }
+  }
+
+  /**
+   *
+   * @param {number} mid
+   * @param {number} page
+   * @param {number} limit
+   * @returns {Promise<{page:{current:number,total:number},list:MessageHistoryDetail[]}>}
+   */
+
+  async getMessageDetail(mid, page = 1, limit = 50) {
+    await this._tokenCheck()
+
+    const body = {
+      token: this.#token.content,
+      apikey: this.#config.key,
+      userid: this.#config.userId,
+      mid,
+      page,
+      limit
+    }
+
+    const res = await Utils.sendFormPost(
+      "https://kakaoapi.aligo.in/akv10/history/detail",
+      body
+    )
+
+    if (res.code === 0) {
+      return {
+        list: res.list,
+        page: {
+          current: Number(res.currentPage),
+          total: Number(res.totalPage)
+        }
+      }
+    } else {
+      throw new Error(res.message)
+    }
+  }
+
+  /**
+   *
+   * @param {Date} startDate
+   * @param {Date} endDate
+   * @param {boolean} detail
+   * @returns {Promise<MessageHistory[] | MessageHistoryDetailList[]>}
+   */
+
+  async getAllMessageHistory(
+    startDate = new Date(),
+    endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+    detail = false
+  ) {
+    await this._tokenCheck()
+
+    const messages = []
+    let totalPage = 1
+    let currentPage = 1
+    while (currentPage <= totalPage) {
+      const res = await this.getMessageHistoryPage(
+        startDate,
+        endDate,
+        currentPage
+      )
+      messages.push(...res.list)
+
+      currentPage += 1
+      totalPage = res.page.total
+    }
+
+    if (detail) {
+      const detailedMessages = await Promise.all(
+        messages.map(message =>
+          // message 정보와 그 message mid에 대한 상세 메세지 리스트
+          this.getMessageDetail(message.mid).then(({ list }) => ({
+            ...message,
+            list
+          }))
+        )
+      )
+
+      return detailedMessages
+    }
+
+    return messages
+  }
 
   /**
    *

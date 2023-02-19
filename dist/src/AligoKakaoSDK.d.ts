@@ -42,6 +42,44 @@ export type SentMessageInfo = {
     scnt: number;
     fcnt: number;
 };
+export type MessageHistory = {
+    mid: number;
+    type: string;
+    sender: string;
+    msg_count: number;
+    mbody: string;
+    reserve_date: string;
+    reserve_state: string;
+    regdate: string;
+};
+export type MessageHistoryDetail = {
+    msgid: string;
+    type: string;
+    sender: string;
+    phone: string;
+    status: number;
+    reqdate: string;
+    sentdate: string;
+    rsltdate: string;
+    reportdate: string;
+    rslt: string;
+    message: string;
+    button_json: string;
+    tpl_code: string;
+    senderKey: string;
+    smid: string;
+};
+export type MessageHistoryDetailList = {
+    mid: number;
+    type: string;
+    sender: string;
+    msg_count: number;
+    mbody: string;
+    reserve_date: string;
+    reserve_state: string;
+    regdate: string;
+    list: MessageHistoryDetail[];
+};
 /**
  * @typedef {{
  * key:string,
@@ -88,6 +126,47 @@ export type SentMessageInfo = {
  * scnt: number,
  * fcnt: number,
  * }} SentMessageInfo
+ *
+ * @typedef {{
+ * mid: number,
+ * type: string,
+ * sender: string,
+ * msg_count: number,
+ * mbody: string,
+ * reserve_date: string,
+ * reserve_state: string,
+ * regdate: string,
+ * }} MessageHistory
+ *
+ * @typedef {{
+ * msgid: string,
+ * type: string,
+ * sender: string,
+ * phone: string,
+ * status: number,
+ * reqdate: string,
+ * sentdate: string,
+ * rsltdate: string,
+ * reportdate: string,
+ * rslt: string,
+ * message: string,
+ * button_json: string,
+ * tpl_code: string,
+ * senderKey: string,
+ * smid: string,
+ * }} MessageHistoryDetail
+ *
+ * @typedef {{
+ * mid: number,
+ * type: string,
+ * sender: string,
+ * msg_count: number,
+ * mbody: string,
+ * reserve_date: string,
+ * reserve_state: string,
+ * regdate: string,
+ * list: MessageHistoryDetail[]
+ * }} MessageHistoryDetailList
  */
 declare class AligoKakaoSDK {
     /**
@@ -100,14 +179,48 @@ declare class AligoKakaoSDK {
         lifetime: Date;
     }>;
     _tokenCheck(): Promise<void>;
-    _getMessageHistoryPage(): Promise<void>;
-    _getMessageDetail(mid: any): Promise<void>;
     /**
      *
      * @returns {Promise<Template[]>}
      */
     getTemplateList(): Promise<Template[]>;
-    getMessageHistory(): Promise<void>;
+    /**
+     *
+     * @param {Date} startDate
+     * @param {Date} endDate
+     * @param {number} page
+     * @param {number} limit
+     * @returns {Promise<{page:{current:number,total:number},list:MessageHistory[]}>}
+     */
+    getMessageHistoryPage(startDate: Date, endDate: Date, page?: number, limit?: number): Promise<{
+        page: {
+            current: number;
+            total: number;
+        };
+        list: MessageHistory[];
+    }>;
+    /**
+     *
+     * @param {number} mid
+     * @param {number} page
+     * @param {number} limit
+     * @returns {Promise<{page:{current:number,total:number},list:MessageHistoryDetail[]}>}
+     */
+    getMessageDetail(mid: number, page?: number, limit?: number): Promise<{
+        page: {
+            current: number;
+            total: number;
+        };
+        list: MessageHistoryDetail[];
+    }>;
+    /**
+     *
+     * @param {Date} startDate
+     * @param {Date} endDate
+     * @param {boolean} detail
+     * @returns {Promise<MessageHistory[] | MessageHistoryDetailList[]>}
+     */
+    getAllMessageHistory(startDate?: Date, endDate?: Date, detail?: boolean): Promise<MessageHistory[] | MessageHistoryDetailList[]>;
     /**
      *
      * @param {Template} template
