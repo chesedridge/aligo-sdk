@@ -224,11 +224,11 @@ declare class AligoKakaoSDK {
     /**
      *
      * @param {Template} template
-     * @param {Message} messages
+     * @param {Message[]} messages
      * @param {Options} options
      * @returns {Promise<SentMessageInfo>}
      */
-    sendMessage(template: Template, messages: Message, options: Options): Promise<SentMessageInfo>;
+    sendMessage(template: Template, messages: Message[], options: Options): Promise<SentMessageInfo>;
     /**
      *
      * @param {string} mid 메세지 ID

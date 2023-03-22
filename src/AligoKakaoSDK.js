@@ -288,7 +288,7 @@ class AligoKakaoSDK {
   /**
    *
    * @param {Template} template
-   * @param {Message} messages
+   * @param {Message[]} messages
    * @param {Options} options
    * @returns {Promise<SentMessageInfo>}
    */
