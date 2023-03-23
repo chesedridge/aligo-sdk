@@ -1,11 +1,12 @@
 {
-  "include": ["src/**/*", "node_modules/@types/**/*", "index.js"],
   "compilerOptions": {
-    "allowJs": true,
+    "target": "ESNext",
+    "module": "NodeNext",
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "target": "ES6"
-  }
+    "outDir": "dist/esm",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true
+  },
+  "include": ["src", "./index.ts"],
+  "exclude": ["node_modules", "dist"]
 }
