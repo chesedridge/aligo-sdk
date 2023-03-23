@@ -133,7 +133,7 @@ class AligoKakaoSDK {
             ...Aligo_utils_js_1.AligoUtil.createMessageBody(template, messages),
             ...options
         };
-        const res = await Common_utils_js_1.CommonUtil.sendFormPost("https://kakaoapi.alogi.in/akv10/alimtalk/send/", body);
+        const res = await Common_utils_js_1.CommonUtil.sendFormPost("https://kakaoapi.aligo.in/akv10/alimtalk/send/", body);
         if (res.code === 0) {
             return res.info;
         }

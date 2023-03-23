@@ -198,7 +198,7 @@ class AligoKakaoSDK {
     }
 
     const res = await CommonUtil.sendFormPost(
-      "https://kakaoapi.alogi.in/akv10/alimtalk/send/",
+      "https://kakaoapi.aligo.in/akv10/alimtalk/send/",
       body
     )
 
