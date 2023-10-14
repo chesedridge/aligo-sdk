@@ -1,6 +1,6 @@
 {
   "name": "aligo-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "kakao alimtalk api sdk",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",

@@ -36,7 +36,7 @@ export declare class Options {
 export declare class SentMessageInfo {
     type: string;
     mid: number;
-    current: number;
+    current: string | number;
     unit: number;
     total: number;
     scnt: number;

@@ -43,7 +43,7 @@ export class Options {
 export class SentMessageInfo {
   type: string
   mid: number
-  current: number
+  current: string | number
   unit: number
   total: number
   scnt: number
