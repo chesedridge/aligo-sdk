@@ -10,6 +10,6 @@ declare class AligoKakaoSDK {
     getMessageHistoryDetailPage(mid: number, page?: number, limit?: number): Promise<MessageHistoryDetailPage>;
     getAllMessageHistory(startDate?: Date, endDate?: Date, detail?: boolean): Promise<MessageHistory[] | MessageHistoryDetailList[]>;
     sendMessage(template: Template, messages: Message[], options?: Options): Promise<SentMessageInfo>;
-    cancelMessage(mid: string): Promise<boolean>;
+    cancelMessage(mid: number): Promise<boolean>;
 }
 export default AligoKakaoSDK;

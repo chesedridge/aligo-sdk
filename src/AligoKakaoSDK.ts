@@ -209,7 +209,7 @@ class AligoKakaoSDK {
     }
   }
 
-  async cancelMessage(mid: string): Promise<boolean> {
+  async cancelMessage(mid: number): Promise<boolean> {
     await this.tokenCheck()
 
     const body = {
