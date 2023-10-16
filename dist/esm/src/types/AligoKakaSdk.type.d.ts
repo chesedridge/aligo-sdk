@@ -89,7 +89,7 @@ export declare class MessageHistoryPage {
     page: Page;
 }
 export declare class MessageHistoryDetailPage {
-    list: MessageHistoryDetailList[];
+    list: MessageHistoryDetail[];
     page: Page;
 }
 export {};

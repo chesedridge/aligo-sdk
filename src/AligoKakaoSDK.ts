@@ -140,11 +140,11 @@ class AligoKakaoSDK {
     }
   }
 
-  async getAllMessageHistory(
+  async getAllMessageHistory<T extends boolean>(
     startDate = new Date(),
     endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    detail = false
-  ): Promise<MessageHistory[] | MessageHistoryDetailList[]> {
+    detail: T = false as T
+  ): Promise<T extends true ? MessageHistory[] : MessageHistoryDetailList[]> {
     await this.tokenCheck()
 
     const messages = []

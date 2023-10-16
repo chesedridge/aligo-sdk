@@ -102,6 +102,6 @@ export class MessageHistoryPage {
 }
 
 export class MessageHistoryDetailPage {
-  list: MessageHistoryDetailList[]
+  list: MessageHistoryDetail[]
   page: Page
 }
