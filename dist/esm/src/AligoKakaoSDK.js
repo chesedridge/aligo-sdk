@@ -1,7 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("es6-shim");
+require("reflect-metadata");
 const Aligo_utils_js_1 = require("./Aligo.utils.js");
 const Common_utils_js_1 = require("./Common.utils.js");
+const AligoKakaSdk_type_js_1 = require("./types/AligoKakaSdk.type.js");
+const class_transformer_1 = require("class-transformer");
 class AligoKakaoSDK {
     config;
     token;
@@ -33,7 +37,7 @@ class AligoKakaoSDK {
             this.token = await this.getToken();
         }
     }
-    async getTemplateList() {
+    async getTemplateList(isPlainToInstance = true) {
         await this.tokenCheck();
         const body = {
             token: this.token.content,
@@ -44,13 +48,15 @@ class AligoKakaoSDK {
         };
         const res = await Common_utils_js_1.CommonUtil.sendFormPost("https://kakaoapi.aligo.in/akv10/template/list", body);
         if (res.code === 0) {
-            return res.list;
+            return isPlainToInstance
+                ? (0, class_transformer_1.plainToInstance)(AligoKakaSdk_type_js_1.Template, res.list)
+                : res.list;
         }
         else {
             throw new Error(res.message);
         }
     }
-    async getMessageHistoryPage(startDate, endDate, page = 1, limit = 500) {
+    async getMessageHistoryPage(startDate, endDate, page = 1, limit = 500, isPlainToInstance = true) {
         await this.tokenCheck();
         const body = {
             token: this.token.content,
@@ -63,19 +69,22 @@ class AligoKakaoSDK {
         };
         const res = await Common_utils_js_1.CommonUtil.sendFormPost("https://kakaoapi.aligo.in/akv10/history/list", body);
         if (res.code === 0) {
-            return {
+            const messageHistoryPage = {
                 list: res.list,
                 page: {
                     current: Number(res.currentPage),
                     total: Number(res.totalPage)
                 }
             };
+            return isPlainToInstance
+                ? (0, class_transformer_1.plainToInstance)(AligoKakaSdk_type_js_1.MessageHistoryPage, messageHistoryPage)
+                : messageHistoryPage;
         }
         else {
             throw new Error(res.message);
         }
     }
-    async getMessageHistoryDetailPage(mid, page = 1, limit = 50) {
+    async getMessageHistoryDetailPage(mid, page = 1, limit = 50, isPlainToInstance = true) {
         await this.tokenCheck();
         const body = {
             token: this.token.content,
@@ -87,25 +96,28 @@ class AligoKakaoSDK {
         };
         const res = await Common_utils_js_1.CommonUtil.sendFormPost("https://kakaoapi.aligo.in/akv10/history/detail", body);
         if (res.code === 0) {
-            return {
+            const messageHistoryDetailPage = {
                 list: res.list,
                 page: {
                     current: Number(res.currentPage),
                     total: Number(res.totalPage)
                 }
             };
+            return isPlainToInstance
+                ? (0, class_transformer_1.plainToInstance)(AligoKakaSdk_type_js_1.MessageHistoryDetailPage, messageHistoryDetailPage)
+                : messageHistoryDetailPage;
         }
         else {
             throw new Error(res.message);
         }
     }
-    async getAllMessageHistory(startDate = new Date(), endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), detail = false) {
+    async getAllMessageHistory(startDate = new Date(), endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), detail, isPlainToInstance = true) {
         await this.tokenCheck();
         const messages = [];
         let totalPage = 1;
         let currentPage = 1;
         while (currentPage <= totalPage) {
-            const res = await this.getMessageHistoryPage(startDate, endDate, currentPage);
+            const res = await this.getMessageHistoryPage(startDate, endDate, currentPage, 500, isPlainToInstance);
             messages.push(...res.list);
             currentPage += 1;
             totalPage = res.page.total;
@@ -113,7 +125,7 @@ class AligoKakaoSDK {
         if (detail) {
             const detailedMessages = await Promise.all(messages.map(message => 
             // message 정보와 그 message mid에 대한 상세 메세지 리스트
-            this.getMessageHistoryDetailPage(message.mid).then(({ list }) => ({
+            this.getMessageHistoryDetailPage(message.mid, 1, 50, isPlainToInstance).then(({ list }) => ({
                 ...message,
                 list
             }))));
@@ -121,7 +133,7 @@ class AligoKakaoSDK {
         }
         return messages;
     }
-    async sendMessage(template, messages, options) {
+    async sendMessage(template, messages, options, isPlainToInstance = true) {
         await this.tokenCheck();
         const body = {
             token: this.token.content,
@@ -135,7 +147,10 @@ class AligoKakaoSDK {
         };
         const res = await Common_utils_js_1.CommonUtil.sendFormPost("https://kakaoapi.aligo.in/akv10/alimtalk/send/", body);
         if (res.code === 0) {
-            return res.info;
+            const sentMessageInfo = res.info;
+            return isPlainToInstance
+                ? (0, class_transformer_1.plainToInstance)(AligoKakaSdk_type_js_1.SentMessageInfo, sentMessageInfo)
+                : sentMessageInfo;
         }
         else {
             throw new Error(res.message);

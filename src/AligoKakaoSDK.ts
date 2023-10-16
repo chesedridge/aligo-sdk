@@ -1,3 +1,5 @@
+import "es6-shim"
+import "reflect-metadata"
 import { AligoUtil } from "./Aligo.utils.js"
 import { CommonUtil } from "./Common.utils.js"
 import {
@@ -11,6 +13,7 @@ import {
   SentMessageInfo,
   Template
 } from "./types/AligoKakaSdk.type.js"
+import { plainToInstance } from "class-transformer"
 
 class AligoKakaoSDK {
   private token
@@ -47,7 +50,7 @@ class AligoKakaoSDK {
     }
   }
 
-  async getTemplateList(): Promise<Template[]> {
+  async getTemplateList(isPlainToInstance = true): Promise<Template[]> {
     await this.tokenCheck()
 
     const body = {
@@ -64,7 +67,9 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
-      return res.list
+      return isPlainToInstance
+        ? plainToInstance(Template, res.list as Template[])
+        : res.list
     } else {
       throw new Error(res.message)
     }
@@ -74,7 +79,8 @@ class AligoKakaoSDK {
     startDate: Date,
     endDate: Date,
     page = 1,
-    limit = 500
+    limit = 500,
+    isPlainToInstance = true
   ): Promise<MessageHistoryPage> {
     await this.tokenCheck()
 
@@ -94,13 +100,17 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
-      return {
+      const messageHistoryPage: MessageHistoryPage = {
         list: res.list,
         page: {
           current: Number(res.currentPage),
           total: Number(res.totalPage)
         }
       }
+
+      return isPlainToInstance
+        ? plainToInstance(MessageHistoryPage, messageHistoryPage)
+        : messageHistoryPage
     } else {
       throw new Error(res.message)
     }
@@ -109,7 +119,8 @@ class AligoKakaoSDK {
   async getMessageHistoryDetailPage(
     mid: number,
     page = 1,
-    limit = 50
+    limit = 50,
+    isPlainToInstance = true
   ): Promise<MessageHistoryDetailPage> {
     await this.tokenCheck()
 
@@ -128,33 +139,52 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
-      return {
+      const messageHistoryDetailPage: MessageHistoryDetailPage = {
         list: res.list,
         page: {
           current: Number(res.currentPage),
           total: Number(res.totalPage)
         }
       }
+
+      return isPlainToInstance
+        ? plainToInstance(MessageHistoryDetailPage, messageHistoryDetailPage)
+        : messageHistoryDetailPage
     } else {
       throw new Error(res.message)
     }
   }
 
-  async getAllMessageHistory<T extends boolean>(
+  async getAllMessageHistory(
+    startDate: Date,
+    endDate: Date,
+    detail: true,
+    isPlainToInstance?: boolean
+  ): Promise<MessageHistoryDetailList[]>
+  async getAllMessageHistory(
+    startDate: Date,
+    endDate: Date,
+    detail: false,
+    isPlainToInstance?: boolean
+  ): Promise<MessageHistory[]>
+  async getAllMessageHistory(
     startDate = new Date(),
     endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    detail: T = false as T
-  ): Promise<T extends true ? MessageHistoryDetailList[] : MessageHistory[]> {
+    detail: boolean,
+    isPlainToInstance = true
+  ): Promise<MessageHistoryDetailList[] | MessageHistory[]> {
     await this.tokenCheck()
 
-    const messages = []
+    const messages: MessageHistory[] = []
     let totalPage = 1
     let currentPage = 1
     while (currentPage <= totalPage) {
       const res = await this.getMessageHistoryPage(
         startDate,
         endDate,
-        currentPage
+        currentPage,
+        500,
+        isPlainToInstance
       )
       messages.push(...res.list)
 
@@ -166,7 +196,12 @@ class AligoKakaoSDK {
       const detailedMessages = await Promise.all(
         messages.map(message =>
           // message 정보와 그 message mid에 대한 상세 메세지 리스트
-          this.getMessageHistoryDetailPage(message.mid).then(({ list }) => ({
+          this.getMessageHistoryDetailPage(
+            message.mid,
+            1,
+            50,
+            isPlainToInstance
+          ).then(({ list }) => ({
             ...message,
             list
           }))
@@ -182,7 +217,8 @@ class AligoKakaoSDK {
   async sendMessage(
     template: Template,
     messages: Message[],
-    options?: Options
+    options?: Options,
+    isPlainToInstance = true
   ): Promise<SentMessageInfo> {
     await this.tokenCheck()
 
@@ -203,7 +239,11 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
-      return res.info
+      const sentMessageInfo: SentMessageInfo = res.info
+
+      return isPlainToInstance
+        ? plainToInstance(SentMessageInfo, sentMessageInfo)
+        : sentMessageInfo
     } else {
       throw new Error(res.message)
     }

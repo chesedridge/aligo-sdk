@@ -1,3 +1,4 @@
+import { Type } from "class-transformer"
 import { Modify } from "./TypeUtil.js"
 
 export class InstanceConfig {
@@ -97,11 +98,13 @@ class Page {
 }
 
 export class MessageHistoryPage {
+  @Type(() => MessageHistory)
   list: MessageHistory[]
   page: Page
 }
 
 export class MessageHistoryDetailPage {
+  @Type(() => MessageHistoryDetail)
   list: MessageHistoryDetail[]
   page: Page
 }
