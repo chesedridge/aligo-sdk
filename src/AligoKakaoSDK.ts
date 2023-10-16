@@ -144,7 +144,7 @@ class AligoKakaoSDK {
     startDate = new Date(),
     endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     detail: T = false as T
-  ): Promise<T extends true ? MessageHistory[] : MessageHistoryDetailList[]> {
+  ): Promise<T extends true ? MessageHistoryDetailList[] : MessageHistory[]> {
     await this.tokenCheck()
 
     const messages = []

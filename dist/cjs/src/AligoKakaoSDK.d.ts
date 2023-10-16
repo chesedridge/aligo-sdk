@@ -8,7 +8,7 @@ declare class AligoKakaoSDK {
     getTemplateList(): Promise<Template[]>;
     getMessageHistoryPage(startDate: Date, endDate: Date, page?: number, limit?: number): Promise<MessageHistoryPage>;
     getMessageHistoryDetailPage(mid: number, page?: number, limit?: number): Promise<MessageHistoryDetailPage>;
-    getAllMessageHistory<T extends boolean>(startDate?: Date, endDate?: Date, detail?: T): Promise<T extends true ? MessageHistory[] : MessageHistoryDetailList[]>;
+    getAllMessageHistory<T extends boolean>(startDate?: Date, endDate?: Date, detail?: T): Promise<T extends true ? MessageHistoryDetailList[] : MessageHistory[]>;
     sendMessage(template: Template, messages: Message[], options?: Options): Promise<SentMessageInfo>;
     cancelMessage(mid: number): Promise<boolean>;
 }
