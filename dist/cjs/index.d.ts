@@ -1,2 +1,2 @@
-import AligoKakaoSDK from "./src/AligoKakaoSDK.js";
+import AligoKakaoSDK from "./src/AligoKakaoSDK";
 export { AligoKakaoSDK as default, AligoKakaoSDK };

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AligoUtil = void 0;
-class AligoUtil {
+export class AligoUtil {
     static replaceAllTokens(haystack, replacers) {
         return haystack.replace(/#{(.+?)}/g, (matched, p1, offset) => {
             if (replacers.hasOwnProperty(p1)) {
@@ -21,4 +18,3 @@ class AligoUtil {
         return master;
     }
 }
-exports.AligoUtil = AligoUtil;

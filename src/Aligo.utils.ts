@@ -1,4 +1,4 @@
-import { Message, MessageContent, Template } from "./types/AligoKakaSdk.type.js"
+import { Message, MessageContent, Template } from "./types/AligoKakaSdk.type"
 
 export class AligoUtil {
   private static replaceAllTokens(

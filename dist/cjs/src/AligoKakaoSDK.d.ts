@@ -1,6 +1,6 @@
 import "es6-shim";
 import "reflect-metadata";
-import { InstanceConfig, Message, MessageHistory, MessageHistoryDetailList, MessageHistoryDetailPage, MessageHistoryPage, Options, SentMessageInfo, Template } from "./types/AligoKakaSdk.type.js";
+import { InstanceConfig, Message, MessageHistory, MessageHistoryDetailList, MessageHistoryDetailPage, MessageHistoryPage, Options, SentMessageInfo, Template } from "./types/AligoKakaSdk.type";
 declare class AligoKakaoSDK {
     private config;
     private token;

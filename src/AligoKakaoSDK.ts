@@ -1,7 +1,7 @@
 import "es6-shim"
 import "reflect-metadata"
-import { AligoUtil } from "./Aligo.utils.js"
-import { CommonUtil } from "./Common.utils.js"
+import { AligoUtil } from "./Aligo.utils"
+import { CommonUtil } from "./Common.utils"
 import {
   InstanceConfig,
   Message,
@@ -12,7 +12,7 @@ import {
   Options,
   SentMessageInfo,
   Template
-} from "./types/AligoKakaSdk.type.js"
+} from "./types/AligoKakaSdk.type"
 import { plainToInstance } from "class-transformer"
 
 class AligoKakaoSDK {
@@ -67,9 +67,12 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
+      const templates: Template[] = res.list
       return isPlainToInstance
-        ? plainToInstance(Template, res.list as Template[])
-        : res.list
+        ? plainToInstance(Template, templates, {
+            excludeExtraneousValues: true
+          })
+        : templates
     } else {
       throw new Error(res.message)
     }
@@ -109,7 +112,9 @@ class AligoKakaoSDK {
       }
 
       return isPlainToInstance
-        ? plainToInstance(MessageHistoryPage, messageHistoryPage)
+        ? plainToInstance(MessageHistoryPage, messageHistoryPage, {
+            excludeExtraneousValues: true
+          })
         : messageHistoryPage
     } else {
       throw new Error(res.message)
@@ -148,7 +153,9 @@ class AligoKakaoSDK {
       }
 
       return isPlainToInstance
-        ? plainToInstance(MessageHistoryDetailPage, messageHistoryDetailPage)
+        ? plainToInstance(MessageHistoryDetailPage, messageHistoryDetailPage, {
+            excludeExtraneousValues: true
+          })
         : messageHistoryDetailPage
     } else {
       throw new Error(res.message)
@@ -242,7 +249,9 @@ class AligoKakaoSDK {
       const sentMessageInfo: SentMessageInfo = res.info
 
       return isPlainToInstance
-        ? plainToInstance(SentMessageInfo, sentMessageInfo)
+        ? plainToInstance(SentMessageInfo, sentMessageInfo, {
+            excludeExtraneousValues: true
+          })
         : sentMessageInfo
     } else {
       throw new Error(res.message)

@@ -1,6 +1,6 @@
 {
   "name": "aligo-sdk",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "kakao alimtalk api sdk",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",
@@ -15,8 +15,8 @@
   },
   "scripts": {
     "test": "ts-node test.ts",
-    "build:esm": "tsc -p tsconfig.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:cjs": "tsc -p tsconfig.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "build": "npm run build:esm && npm run build:cjs"
   },
   "repository": {
