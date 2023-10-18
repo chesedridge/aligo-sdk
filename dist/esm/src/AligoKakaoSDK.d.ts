@@ -9,7 +9,7 @@ declare class AligoKakaoSDK {
     private tokenCheck;
     getTemplateList(isPlainToInstance?: boolean): Promise<Template[]>;
     getMessageHistoryPage(startDate: Date, endDate: Date, page?: number, limit?: number, isPlainToInstance?: boolean): Promise<MessageHistoryPage>;
-    getMessageHistoryDetailPage(mid: number, page?: number, limit?: number, isPlainToInstance?: boolean): Promise<MessageHistoryDetailPage>;
+    getMessageHistoryDetailPage(mid: string, page?: number, limit?: number, isPlainToInstance?: boolean): Promise<MessageHistoryDetailPage>;
     getAllMessageHistory(startDate: Date, endDate: Date, detail: true, isPlainToInstance?: boolean): Promise<MessageHistoryDetailList[]>;
     getAllMessageHistory(startDate: Date, endDate: Date, detail: false, isPlainToInstance?: boolean): Promise<MessageHistory[]>;
     sendMessage(template: Template, messages: Message[], options?: Options, isPlainToInstance?: boolean): Promise<SentMessageInfo>;

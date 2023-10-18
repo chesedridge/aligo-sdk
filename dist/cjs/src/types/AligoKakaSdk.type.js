@@ -142,7 +142,7 @@ class MessageHistory {
 }
 __decorate([
     (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], MessageHistory.prototype, "mid", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
@@ -154,7 +154,7 @@ __decorate([
 ], MessageHistory.prototype, "sender", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], MessageHistory.prototype, "msg_count", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
@@ -193,7 +193,7 @@ __decorate([
 ], MessageHistoryDetail.prototype, "phone", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], MessageHistoryDetail.prototype, "status", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
@@ -236,40 +236,8 @@ __decorate([
     __metadata("design:type", String)
 ], MessageHistoryDetail.prototype, "smid", void 0);
 exports.MessageHistoryDetail = MessageHistoryDetail;
-class MessageHistoryDetailList {
+class MessageHistoryDetailList extends MessageHistory {
 }
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Number)
-], MessageHistoryDetailList.prototype, "mid", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], MessageHistoryDetailList.prototype, "type", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], MessageHistoryDetailList.prototype, "sender", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Number)
-], MessageHistoryDetailList.prototype, "msg_count", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], MessageHistoryDetailList.prototype, "mbody", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], MessageHistoryDetailList.prototype, "reserve_date", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], MessageHistoryDetailList.prototype, "reserve_state", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], MessageHistoryDetailList.prototype, "regdate", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Array)

@@ -80,13 +80,13 @@ export class SentMessageInfo {
 
 export class MessageHistory {
   @Expose()
-  mid: number
+  mid: string
   @Expose()
   type: string
   @Expose()
   sender: string
   @Expose()
-  msg_count: number
+  msg_count: string
   @Expose()
   mbody: string
   @Expose()
@@ -107,7 +107,7 @@ export class MessageHistoryDetail {
   @Expose()
   phone: string
   @Expose()
-  status: number
+  status: string
   @Expose()
   reqdate: string
   @Expose()
@@ -127,26 +127,10 @@ export class MessageHistoryDetail {
   @Expose()
   senderKey: string
   @Expose()
-  smid: string
+  smid?: string
 }
 
-export class MessageHistoryDetailList {
-  @Expose()
-  mid: number
-  @Expose()
-  type: string
-  @Expose()
-  sender: string
-  @Expose()
-  msg_count: number
-  @Expose()
-  mbody: string
-  @Expose()
-  reserve_date: string
-  @Expose()
-  reserve_state: string
-  @Expose()
-  regdate: string
+export class MessageHistoryDetailList extends MessageHistory {
   @Expose()
   list: MessageHistoryDetail[]
 }

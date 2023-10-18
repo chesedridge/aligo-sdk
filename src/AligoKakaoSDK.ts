@@ -122,7 +122,7 @@ class AligoKakaoSDK {
   }
 
   async getMessageHistoryDetailPage(
-    mid: number,
+    mid: string,
     page = 1,
     limit = 50,
     isPlainToInstance = true

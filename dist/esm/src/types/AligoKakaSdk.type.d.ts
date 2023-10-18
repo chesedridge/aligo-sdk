@@ -43,10 +43,10 @@ export declare class SentMessageInfo {
     fcnt: number;
 }
 export declare class MessageHistory {
-    mid: number;
+    mid: string;
     type: string;
     sender: string;
-    msg_count: number;
+    msg_count: string;
     mbody: string;
     reserve_date: string;
     reserve_state: string;
@@ -57,7 +57,7 @@ export declare class MessageHistoryDetail {
     type: string;
     sender: string;
     phone: string;
-    status: number;
+    status: string;
     reqdate: string;
     sentdate: string;
     rsltdate: string;
@@ -67,17 +67,9 @@ export declare class MessageHistoryDetail {
     button_json: string;
     tpl_code: string;
     senderKey: string;
-    smid: string;
+    smid?: string;
 }
-export declare class MessageHistoryDetailList {
-    mid: number;
-    type: string;
-    sender: string;
-    msg_count: number;
-    mbody: string;
-    reserve_date: string;
-    reserve_state: string;
-    regdate: string;
+export declare class MessageHistoryDetailList extends MessageHistory {
     list: MessageHistoryDetail[];
 }
 declare class Page {
