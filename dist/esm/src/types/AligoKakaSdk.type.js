@@ -107,11 +107,11 @@ __decorate([
 ], SentMessageInfo.prototype, "type", void 0);
 __decorate([
     Expose(),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], SentMessageInfo.prototype, "mid", void 0);
 __decorate([
     Expose(),
-    __metadata("design:type", Object)
+    __metadata("design:type", String)
 ], SentMessageInfo.prototype, "current", void 0);
 __decorate([
     Expose(),

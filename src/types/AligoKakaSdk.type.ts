@@ -65,9 +65,9 @@ export class SentMessageInfo {
   @Expose()
   type: string
   @Expose()
-  mid: number
+  mid: string
   @Expose()
-  current: string | number
+  current: string
   @Expose()
   unit: number
   @Expose()
