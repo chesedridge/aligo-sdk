@@ -1,4 +1,4 @@
-import { Expose, Type } from "class-transformer"
+import { Expose, Transform, Type } from "class-transformer"
 // import { Modify } from "./types/TypeUtil"
 
 export class InstanceConfig {
@@ -65,6 +65,7 @@ export class SentMessageInfo {
   @Expose()
   type: string
   @Expose()
+  @Transform(({ value }) => value.toString())
   mid: string
   @Expose()
   current: string

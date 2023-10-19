@@ -115,6 +115,7 @@ __decorate([
 ], SentMessageInfo.prototype, "type", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
+    (0, class_transformer_1.Transform)(({ value }) => value.toString()),
     __metadata("design:type", String)
 ], SentMessageInfo.prototype, "mid", void 0);
 __decorate([

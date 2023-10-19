@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Expose, Type } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
 // import { Modify } from "./types/TypeUtil"
 export class InstanceConfig {
 }
@@ -107,6 +107,7 @@ __decorate([
 ], SentMessageInfo.prototype, "type", void 0);
 __decorate([
     Expose(),
+    Transform(({ value }) => value.toString()),
     __metadata("design:type", String)
 ], SentMessageInfo.prototype, "mid", void 0);
 __decorate([
