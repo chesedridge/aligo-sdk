@@ -43,5 +43,10 @@ class CommonUtil {
             return res.data;
         });
     }
+    static sleep(ms) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        });
+    }
 }
 exports.CommonUtil = CommonUtil;

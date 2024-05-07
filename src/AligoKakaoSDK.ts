@@ -1,60 +1,38 @@
 import "es6-shim"
 import "reflect-metadata"
+import typia from "typia"
 import { AligoUtil } from "./Aligo.utils"
 import { CommonUtil } from "./Common.utils"
 import {
-  InstanceConfig,
-  Message,
-  MessageHistory,
-  MessageHistoryDetailList,
-  MessageHistoryDetailPage,
-  MessageHistoryPage,
-  Options,
-  SentMessageInfo,
-  Template
+  IInstanceConfig,
+  IMessage,
+  IMessageHistory,
+  IMessageHistoryDetailList,
+  IMessageHistoryDetailPage,
+  IMessageHistoryPage,
+  IOptions,
+  ISentMessageInfo,
+  ITemplate
 } from "./types/AligoKakaSdk.type"
-import { plainToInstance } from "class-transformer"
 
 class AligoKakaoSDK {
-  private token
+  constructor(private config: IInstanceConfig) {
+    const requiredKeys = [
+      "key",
+      "userId",
+      "sender",
+      "senderKey"
+    ] as (keyof IInstanceConfig)[]
 
-  constructor(private config: InstanceConfig) {
-    const requiredKeys = ["key", "userId", "sender", "senderKey"]
     if (requiredKeys.some(key => !config[key])) {
       throw new Error(`Required keys are missing: ${requiredKeys.join(", ")}`)
     }
+
     this.config = config
   }
 
-  private async getToken(lifetimeMs = 1000 * 30) {
-    const res = await CommonUtil.sendFormPost(
-      `https://kakaoapi.aligo.in/akv10/token/create/${lifetimeMs}/s`,
-      {
-        apikey: this.config.key,
-        userid: this.config.userId
-      }
-    )
-    if (res.code === 0) {
-      return {
-        content: res.token,
-        lifetime: new Date(Date.now() + lifetimeMs)
-      }
-    } else {
-      throw new Error(res.message)
-    }
-  }
-
-  private async tokenCheck(): Promise<void> {
-    if (!this.token || this.token.lifetime < Date.now()) {
-      this.token = await this.getToken()
-    }
-  }
-
-  async getTemplateList(isPlainToInstance = true): Promise<Template[]> {
-    await this.tokenCheck()
-
+  async getTemplateList(): Promise<ITemplate[]> {
     const body = {
-      token: this.token.content,
       apikey: this.config.key,
       userid: this.config.userId,
       sender: this.config.sender,
@@ -67,12 +45,10 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
-      const templates: Template[] = res.list
-      return isPlainToInstance
-        ? plainToInstance(Template, templates, {
-            excludeExtraneousValues: true
-          })
-        : templates
+      const templates: ITemplate[] = res.list
+      typia.assert(templates)
+
+      return templates
     } else {
       throw new Error(res.message)
     }
@@ -82,13 +58,9 @@ class AligoKakaoSDK {
     startDate: Date,
     endDate: Date,
     page = 1,
-    limit = 500,
-    isPlainToInstance = true
-  ): Promise<MessageHistoryPage> {
-    await this.tokenCheck()
-
+    limit = 500
+  ): Promise<IMessageHistoryPage> {
     const body = {
-      token: this.token.content,
       apikey: this.config.key,
       userid: this.config.userId,
       page,
@@ -103,19 +75,16 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
-      const messageHistoryPage: MessageHistoryPage = {
+      const messageHistoryPage: IMessageHistoryPage = {
         list: res.list,
         page: {
           current: Number(res.currentPage),
           total: Number(res.totalPage)
         }
       }
+      typia.assert(messageHistoryPage)
 
-      return isPlainToInstance
-        ? plainToInstance(MessageHistoryPage, messageHistoryPage, {
-            excludeExtraneousValues: true
-          })
-        : messageHistoryPage
+      return messageHistoryPage
     } else {
       throw new Error(res.message)
     }
@@ -124,13 +93,9 @@ class AligoKakaoSDK {
   async getMessageHistoryDetailPage(
     mid: string,
     page = 1,
-    limit = 50,
-    isPlainToInstance = true
-  ): Promise<MessageHistoryDetailPage> {
-    await this.tokenCheck()
-
+    limit = 50
+  ): Promise<IMessageHistoryDetailPage> {
     const body = {
-      token: this.token.content,
       apikey: this.config.key,
       userid: this.config.userId,
       mid,
@@ -144,19 +109,16 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
-      const messageHistoryDetailPage: MessageHistoryDetailPage = {
+      const messageHistoryDetailPage: IMessageHistoryDetailPage = {
         list: res.list,
         page: {
           current: Number(res.currentPage),
           total: Number(res.totalPage)
         }
       }
+      typia.assert(messageHistoryDetailPage)
 
-      return isPlainToInstance
-        ? plainToInstance(MessageHistoryDetailPage, messageHistoryDetailPage, {
-            excludeExtraneousValues: true
-          })
-        : messageHistoryDetailPage
+      return messageHistoryDetailPage
     } else {
       throw new Error(res.message)
     }
@@ -165,24 +127,19 @@ class AligoKakaoSDK {
   async getAllMessageHistory(
     startDate: Date,
     endDate: Date,
-    detail: true,
-    isPlainToInstance?: boolean
-  ): Promise<MessageHistoryDetailList[]>
+    detail: true
+  ): Promise<IMessageHistoryDetailList[]>
   async getAllMessageHistory(
     startDate: Date,
     endDate: Date,
-    detail: false,
-    isPlainToInstance?: boolean
-  ): Promise<MessageHistory[]>
+    detail: false
+  ): Promise<IMessageHistory[]>
   async getAllMessageHistory(
     startDate = new Date(),
     endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    detail: boolean,
-    isPlainToInstance = true
-  ): Promise<MessageHistoryDetailList[] | MessageHistory[]> {
-    await this.tokenCheck()
-
-    const messages: MessageHistory[] = []
+    detail: boolean
+  ): Promise<IMessageHistoryDetailList[] | IMessageHistory[]> {
+    const messages: IMessageHistory[] = []
     let totalPage = 1
     let currentPage = 1
     while (currentPage <= totalPage) {
@@ -190,8 +147,7 @@ class AligoKakaoSDK {
         startDate,
         endDate,
         currentPage,
-        500,
-        isPlainToInstance
+        500
       )
       messages.push(...res.list)
 
@@ -203,41 +159,41 @@ class AligoKakaoSDK {
       const detailedMessages = await Promise.all(
         messages.map(message =>
           // message 정보와 그 message mid에 대한 상세 메세지 리스트
-          this.getMessageHistoryDetailPage(
-            message.mid,
-            1,
-            50,
-            isPlainToInstance
-          ).then(({ list }) => ({
-            ...message,
-            list
-          }))
+          this.getMessageHistoryDetailPage(message.mid, 1, 50).then(
+            ({ list }) => ({
+              ...message,
+              list
+            })
+          )
         )
       )
 
+      typia.assert<IMessageHistoryDetailList[]>(detailedMessages)
       return detailedMessages
     }
 
+    typia.assert(messages)
     return messages
   }
 
   async sendMessage(
-    template: Template,
-    messages: Message[],
-    options?: Options,
-    isPlainToInstance = true
-  ): Promise<SentMessageInfo> {
-    await this.tokenCheck()
-
+    template: ITemplate,
+    messages: IMessage[],
+    options?: IOptions
+  ): Promise<ISentMessageInfo> {
     const body = {
-      token: this.token.content,
       apikey: this.config.key,
       userid: this.config.userId,
       sender: this.config.sender,
       senderkey: this.config.senderKey,
       tpl_code: template.templtCode,
       ...AligoUtil.createMessageBody(template, messages),
-      ...options
+      ...{
+        senddate: options?.sendDate
+          ? CommonUtil.formatDate(options.sendDate, "YYYYMMDDHHmmss")
+          : undefined,
+        failover: options?.failover ? (options.failover ? "Y" : "N") : "N"
+      }
     }
 
     const res = await CommonUtil.sendFormPost(
@@ -246,23 +202,17 @@ class AligoKakaoSDK {
     )
 
     if (res.code === 0) {
-      const sentMessageInfo: SentMessageInfo = res.info
+      const sentMessageInfo: ISentMessageInfo = res.info
 
-      return isPlainToInstance
-        ? plainToInstance(SentMessageInfo, sentMessageInfo, {
-            excludeExtraneousValues: true
-          })
-        : sentMessageInfo
+      typia.assert(sentMessageInfo)
+      return sentMessageInfo
     } else {
       throw new Error(res.message)
     }
   }
 
   async cancelMessage(mid: number): Promise<boolean> {
-    await this.tokenCheck()
-
     const body = {
-      token: this.token.content,
       apikey: this.config.key,
       userid: this.config.userId,
       mid

@@ -1,10 +1,10 @@
-export declare class InstanceConfig {
+export interface IInstanceConfig {
     key: string;
     userId: string;
     sender: string;
     senderKey: string;
 }
-export declare class Template {
+export interface ITemplate {
     templtCode: string;
     templtContent: string;
     templtName: string;
@@ -21,28 +21,28 @@ export declare class Template {
     buttons: any[];
     cdate: string;
 }
-export declare class MessageContent {
+export interface IMessageContent {
     [key: string]: string;
 }
-export declare class Message {
+export interface IMessage {
     target: string;
     subject: string;
-    content: MessageContent;
+    content: IMessageContent;
 }
-export declare class Options {
-    senddate?: string;
-    failover?: "Y" | "N";
+export interface IOptions {
+    sendDate?: Date;
+    failover?: boolean;
 }
-export declare class SentMessageInfo {
+export interface ISentMessageInfo {
     type: string;
-    mid: string;
+    mid: number;
     current: string;
     unit: number;
     total: number;
     scnt: number;
     fcnt: number;
 }
-export declare class MessageHistory {
+export interface IMessageHistory {
     mid: string;
     type: string;
     sender: string;
@@ -52,7 +52,7 @@ export declare class MessageHistory {
     reserve_state: string;
     regdate: string;
 }
-export declare class MessageHistoryDetail {
+export interface IMessageHistoryDetail {
     msgid: string;
     type: string;
     sender: string;
@@ -69,19 +69,19 @@ export declare class MessageHistoryDetail {
     senderKey: string;
     smid?: string;
 }
-export declare class MessageHistoryDetailList extends MessageHistory {
-    list: MessageHistoryDetail[];
+export interface IMessageHistoryDetailList extends IMessageHistory {
+    list: IMessageHistoryDetail[];
 }
-declare class Page {
+interface IPage {
     total: number;
     current: number;
 }
-export declare class MessageHistoryPage {
-    list: MessageHistory[];
-    page: Page;
+export interface IMessageHistoryPage {
+    list: IMessageHistory[];
+    page: IPage;
 }
-export declare class MessageHistoryDetailPage {
-    list: MessageHistoryDetail[];
-    page: Page;
+export interface IMessageHistoryDetailPage {
+    list: IMessageHistoryDetail[];
+    page: IPage;
 }
 export {};

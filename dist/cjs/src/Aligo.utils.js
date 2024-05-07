@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AligoUtil = void 0;
 class AligoUtil {
     static replaceAllTokens(haystack, replacers) {
-        return haystack.replace(/#{(.+?)}/g, (matched, p1, offset) => {
+        return haystack.replace(/#{(.+?)}/g, (_matched, p1, _offset) => {
             if (replacers.hasOwnProperty(p1)) {
                 return replacers[p1];
             }
@@ -17,6 +17,8 @@ class AligoUtil {
             master[`subject_${i + 1}`] = message.subject;
             master[`message_${i + 1}`] = this.replaceAllTokens(template.templtContent, message.content);
             master[`button_${i + 1}`] = JSON.stringify({ button: template.buttons });
+            master[`fsubject_${i + 1}`] = message.subject;
+            master[`fmessage_${i + 1}`] = this.replaceAllTokens(template.templtContent, message.content);
         });
         return master;
     }
