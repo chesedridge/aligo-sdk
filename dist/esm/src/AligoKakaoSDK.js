@@ -26,7 +26,7 @@ class AligoKakaoSDK {
             "sender",
             "senderKey"
         ];
-        if (requiredKeys.some(key => !config[key])) {
+        if (requiredKeys.some((key) => !config[key])) {
             throw new Error(`Required keys are missing: ${requiredKeys.join(", ")}`);
         }
         this.config = config;
@@ -405,7 +405,7 @@ class AligoKakaoSDK {
                 totalPage = res.page.total;
             }
             if (detail) {
-                const detailedMessages = yield Promise.all(messages.map(message => 
+                const detailedMessages = yield Promise.all(messages.map((message) => 
                 // message 정보와 그 message mid에 대한 상세 메세지 리스트
                 this.getMessageHistoryDetailPage(message.mid, 1, 50).then(({ list }) => (Object.assign(Object.assign({}, message), { list })))));
                 ((input, errorFactory) => {
@@ -615,12 +615,17 @@ class AligoKakaoSDK {
     }
     sendMessage(template, messages, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const body = Object.assign(Object.assign({ apikey: this.config.key, userid: this.config.userId, sender: this.config.sender, senderkey: this.config.senderKey, tpl_code: template.templtCode }, Aligo_utils_1.AligoUtil.createMessageBody(template, messages)), {
-                senddate: (options === null || options === void 0 ? void 0 : options.sendDate)
-                    ? Common_utils_1.CommonUtil.formatDate(options.sendDate, "YYYYMMDDHHmmss")
-                    : undefined,
-                failover: (options === null || options === void 0 ? void 0 : options.failover) ? (options.failover ? "Y" : "N") : "N"
-            });
+            const sendDateOption = (options === null || options === void 0 ? void 0 : options.sendDate)
+                ? {
+                    senddate: Common_utils_1.CommonUtil.formatDate(options.sendDate, "YYYYMMDDHHmmss")
+                }
+                : {};
+            const failoverOption = (options === null || options === void 0 ? void 0 : options.failover)
+                ? {
+                    failover: options.failover ? "Y" : "N"
+                }
+                : { failover: "N" };
+            const body = Object.assign(Object.assign(Object.assign({ apikey: this.config.key, userid: this.config.userId, sender: this.config.sender, senderkey: this.config.senderKey, tpl_code: template.templtCode }, Aligo_utils_1.AligoUtil.createMessageBody(template, messages)), sendDateOption), failoverOption);
             const res = yield Common_utils_1.CommonUtil.sendFormPost("https://kakaoapi.aligo.in/akv10/alimtalk/send/", body);
             if (res.code === 0) {
                 const sentMessageInfo = res.info;

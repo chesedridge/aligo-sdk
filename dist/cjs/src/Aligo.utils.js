@@ -17,6 +17,8 @@ class AligoUtil {
             master[`subject_${i + 1}`] = message.subject;
             master[`message_${i + 1}`] = this.replaceAllTokens(template.templtContent, message.content);
             master[`button_${i + 1}`] = JSON.stringify({ button: template.buttons });
+            // 강조형 타이틀
+            master[`emtitle_${i + 1}`] = this.replaceAllTokens(template.templtTitle, message.content);
             master[`fsubject_${i + 1}`] = message.subject;
             master[`fmessage_${i + 1}`] = this.replaceAllTokens(template.templtContent, message.content);
         });
